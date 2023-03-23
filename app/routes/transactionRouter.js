@@ -8,8 +8,8 @@ const transactionRouter = express.Router()
 transactionRouter.post('/create', validate(insertValidation), create)
 transactionRouter.get('/report', report)
 transactionRouter.get('/', findAll)
-transactionRouter.get('/:transactionId', findOne)
-transactionRouter.put('/:transactionId', validate(updateValidation), update)
-transactionRouter.delete('/:transactionId', destroy)
+transactionRouter.get('/:uuid', findOne)
+transactionRouter.put('/:uuid', validate(updateValidation), update)
+transactionRouter.delete('/:uuid', destroy)
 
 module.exports = transactionRouter

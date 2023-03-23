@@ -11,6 +11,14 @@ exports.create = async (req, res) => {
     const now = new Date()
     if (body.type === transactionType.present && (now.getHours() > 8) && now.getMinutes() > 0) body.notes = 'terlambat'
 
+    const isAlreadyInput = await Transaction.findOne({ 
+      where: { 
+        studentId: body.studentId,
+        createdAt: sequelize.where(sequelize.fn('date', sequelize.col('createdAt')), '=', now.toISOString().split('T')[0])
+      }
+    })
+    if (isAlreadyInput) return res.send({ message: 'Student can only fill in the absence once' })
+
     const transaction = await Transaction.create(body, { transaction: t })
     await t.commit()
 
@@ -36,7 +44,7 @@ exports.update = async (req, res) => {
   try {
     if (errors) { throw new Error('Validation Error') }
 
-    const transaction = await Transaction.update(body, { where: { id: params.transactionId }, transaction: t})
+    const transaction = await Transaction.update(body, { where: { uuid: params.uuid }, transaction: t})
     await t.commit()  
     
     if (!transaction)  return res.status(409).send({ message: "Failed to update data" })
@@ -70,16 +78,14 @@ exports.findAll = async (req, res) => {
 
 exports.findOne = async (req, res) => {
   try {
-    const { transactionId } = req.params
+    const { uuid } = req.params
     const transaction = await Transaction.findOne({
-      where: { id: transactionId },
+      where: { uuid },
       attributes: Transaction.getBasicAttribute()
     })
     
     if (!transaction) {
-      return res.status(404).send({
-        message: "transaction not found"
-      })
+      return res.status(404).send({ message: "transaction not found" })
     }
     return res.send({
       message: "Successfully retrieving transaction data",
@@ -96,19 +102,18 @@ exports.findOne = async (req, res) => {
 exports.destroy = async (req, res) => {
   const t = await sequelize.transaction()
   try {
-    const { transactionId } = req.params
+    const { uuid } = req.params
+    
     const transaction = await Transaction.destroy({
-      where: { id: transactionId }
+      where: { uuid },
+      transaction: t
     })
+    await t.commit()
 
     if(!transaction) {
-      return res.status(404).send({
-        message: "transaction not found"
-      })
+      return res.status(404).send({ message: "transaction not found" })
     }
-    return res.send({
-      message: "Successfully remove this transaction"
-    })
+    return res.send({ message: "Successfully remove this transaction" })
   } catch (error) {
     console.error(error)
     await t.rollback()

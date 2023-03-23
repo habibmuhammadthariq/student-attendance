@@ -9,8 +9,8 @@ const studentRouter = express.Router()
 
 studentRouter.post('/create', validate(insertValidation), create)
 studentRouter.get('/',  findAll)
-studentRouter.get('/:studentId', findOne)
-studentRouter.put('/:studentId', validate(updateValidation), update)
-studentRouter.delete('/:studentId', destroy)
+studentRouter.get('/:uuid', findOne)
+studentRouter.put('/:uuid', validate(updateValidation), update)
+studentRouter.delete('/:uuid', destroy)
 
 module.exports = studentRouter

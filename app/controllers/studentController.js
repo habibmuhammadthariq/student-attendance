@@ -37,7 +37,7 @@ exports.update = async (req, res) => {
     }
 
     // if (files.length) body.image_url = `${APP_URL}/assets/${files[0].filename}`
-    const student = await Student.update(body, { where: { id: params.studentId }, transaction: t})
+    const student = await Student.update(body, { where: { uuid: params.uuid }, transaction: t})
     await t.commit()  
     
     if (!student)  return res.status(409).send({ message: "Failed to update data" })
@@ -78,16 +78,17 @@ exports.findAll = async (req, res) => {
 
 exports.findOne = async (req, res) => {
   try {
-    const { studentId } = req.params
+    const { uuid } = req.params
 
-    const student = await Student.findByPk(parseInt(studentId) || null,{
+    const student = await Student.findOne({
+      where: { uuid },
       attributes: Student.getBasicAttribute()
     })
 
     if (!student) return res.status(404).send({ message: "student not found" })
     
     return res.send({
-      message: `Successfully retrieve ${student.name} data`,
+      message: `Successfully retrieve data ${student.name}`,
       data: student
     })
   } catch (error) {
@@ -101,8 +102,8 @@ exports.findOne = async (req, res) => {
 exports.destroy = async (req, res) => {
   const t = await sequelize.transaction()
   try {
-    const { studentId } = req.params
-    let student = await Student.findByPk(parseInt(studentId) || null)
+    const { uuid } = req.params
+    let student = await Student.findOne({ where: { uuid } })
 
     if (!student) return res.send({ message: "student not found "})
 

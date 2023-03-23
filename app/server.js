@@ -27,6 +27,7 @@ app.get('/', (req, res) => {
 })
 
 // routes
+app.get('/test', (req, res) => { res.json({ message: 'hello world' }) })
 app.use('/api/', indexRouter)
 
 // read file
