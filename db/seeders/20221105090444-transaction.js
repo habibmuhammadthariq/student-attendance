@@ -23,6 +23,42 @@ module.exports = {
       type: 'ABSENT',
       createdAt: new Date("2023-03-22"),
       updatedAt: new Date("2023-03-22")
+    },{
+      uuid: crypto.randomUUID(),
+      studentId: 2,
+      type: 'ABSENT',
+      createdAt: new Date("2023-03-20"),
+      updatedAt: new Date("2023-03-20")
+    },{
+      uuid: crypto.randomUUID(),
+      studentId: 2,
+      type: 'ABSENT',
+      createdAt: new Date("2023-03-21"),
+      updatedAt: new Date("2023-03-21")
+    },{
+      uuid: crypto.randomUUID(),
+      studentId: 2,
+      type: 'PRESENT',
+      createdAt: new Date("2023-03-22"),
+      updatedAt: new Date("2023-03-22")
+    },{
+      uuid: crypto.randomUUID(),
+      studentId: 3,
+      type: 'PRESENT',
+      createdAt: new Date("2023-03-20"),
+      updatedAt: new Date("2023-03-20")
+    },{
+      uuid: crypto.randomUUID(),
+      studentId: 3,
+      type: 'PRESENT',
+      createdAt: new Date("2023-03-21"),
+      updatedAt: new Date("2023-03-21")
+    },{
+      uuid: crypto.randomUUID(),
+      studentId: 3,
+      type: 'PRESENT',
+      createdAt: new Date("2023-03-22"),
+      updatedAt: new Date("2023-03-22")
     }])
   },
 
